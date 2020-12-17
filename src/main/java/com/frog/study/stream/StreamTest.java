@@ -1,5 +1,8 @@
-package com.frog.study;
+package com.frog.study.stream;
 
+import com.frog.study.Student;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -96,4 +99,34 @@ public class StreamTest {
         students.stream().peek(System.out::println).map(Student::getName).peek(s -> System.out.println("________")).forEach(System.out::println);
     }
 
+    /**
+     * 根据给定的function进行聚合操作，可以通过reduce实现很多操作
+     */
+    private static void reduce() {
+        Integer[] arr = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8};
+        //reduce有三个构造函数
+        //第一个，给定初始值的,直接返回值
+        Integer sum = Arrays.stream(arr).reduce(0, (i, j) -> i + j);
+
+        //第二个,没有初始值的返回的是Optional
+        Integer sum2 = Arrays.stream(arr).reduce((i, j) -> i + j).get();
+
+        //第三个(该构造器第三个参数是在并行计算时用到的，用于多个任务的结果集的合并)，见下面，使用reduce实现map
+    }
+
+    /**
+     * 使用reduce和lambda表达式来实现map
+     */
+    public static <I, O> List<O> map(Stream<I> stream, Function<I, O> mapper) {
+        return stream.reduce(new ArrayList<O>(), (acc, x) -> {
+            List<O> newAcc = new ArrayList<>(acc);
+            newAcc.add(mapper.apply(x));
+            return newAcc;
+        }, (List<O> left, List<O> right) -> {
+            // We are copying left to new list to avoid mutating it.
+            List<O> newLeft = new ArrayList<>(left);
+            newLeft.addAll(right);
+            return newLeft;
+        });
+    }
 }

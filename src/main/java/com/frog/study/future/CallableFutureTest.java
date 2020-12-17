@@ -1,4 +1,4 @@
-package com.frog.study.concurrent;
+package com.frog.study.future;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;

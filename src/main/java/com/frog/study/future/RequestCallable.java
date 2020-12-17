@@ -34,7 +34,7 @@ public class RequestCallable implements Callable<String> {
         //String result = HttpUtils.get(requestUrl);
         //模拟一个超时操作
         Thread.sleep(5000);
-        String result = null;
+        String result = requestUrl + System.currentTimeMillis();
         System.out.println("callable url: " + requestUrl + " 用时 --------"
                 + (System.currentTimeMillis() - beginTime) + " ms");
 

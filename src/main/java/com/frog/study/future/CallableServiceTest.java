@@ -1,19 +1,21 @@
 package com.frog.study.future;
 
 import org.springframework.util.CollectionUtils;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
 
 public class CallableServiceTest {
 
-    private static final int FUTURE_TIMEOUT = 5000;
+    private static final int FUTURE_TIMEOUT = 15000;
 
     // 使用先进先出的队列
     public final static BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>();
     // 执行callable的线程池
     public static ExecutorService executorService = new ThreadPoolExecutor(5,
-            15 ,
+            15,
             10,
             TimeUnit.SECONDS,
             queue);
@@ -27,7 +29,7 @@ public class CallableServiceTest {
 
         List<FutureTask<String>> futureTaskList = new ArrayList<>();
         for (String url : requestUrlList) {
-            RequestCallable callable  = new RequestCallable(url);
+            RequestCallable callable = new RequestCallable(url);
             FutureTask<String> futureTask = new FutureTask<>(callable);
             futureTaskList.add(futureTask);
             // 线程池开始获取数据
@@ -46,7 +48,7 @@ public class CallableServiceTest {
             } catch (TimeoutException e) {
                 System.out.println("超时");
                 e.printStackTrace();
-            }finally {
+            } finally {
                 // 最后一定要调用cancel方法，里面的参数 mayInterruptIfRunning 是是否在运行的时候也关闭，如果设置为true，那么在
                 // 运行的时候也能关闭，之后的代码不会再执行。
                 // 如果正在运行，暂停成功，会返回true，如果运行完了，那么不管 mayInterruptIfRunning 是什么值，都会返回false。
@@ -59,6 +61,9 @@ public class CallableServiceTest {
 
     public static void main(String[] args) {
         CallableServiceTest test = new CallableServiceTest();
-        test.getCallableData(null);
+        test.getCallableData(Arrays.asList("url", "url")).forEach(System.out::println);
+
+        //关闭线程池
+        executorService.shutdownNow();
     }
 }
