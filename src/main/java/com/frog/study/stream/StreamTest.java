@@ -66,8 +66,10 @@ public class StreamTest {
      */
     static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        //apply将函数应用到参数身上，并返回值
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
+
 
     /**
      * 复用创建好的stream

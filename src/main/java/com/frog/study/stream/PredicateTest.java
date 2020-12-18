@@ -1,5 +1,6 @@
 package com.frog.study.stream;
 
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**

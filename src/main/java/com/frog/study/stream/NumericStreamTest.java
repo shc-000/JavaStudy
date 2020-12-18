@@ -10,7 +10,18 @@ import java.util.stream.Stream;
  * @since 2020/12/17 9:58 下午
  */
 public class NumericStreamTest {
-    //IntStream(相当于使用拆箱后的结果，节约内存占用量),LongStream,DoubleStream...
+    /*在java.util.function包中，我们可以看到IntPredicate、IntFunction、IntSupplier、IntConsumer、LongConsumer、LongFunction、LongPredicate、LongSupplier等，
+    是为了在输入和输出都是原始类型时，避免自动装箱的操作。
+    java的自动装箱机制虽然可以让我们在原始类型和引用类型之间的装箱和拆箱操作是自动完成的，
+    但这在性能方面是要付出代价的。装箱后的值本质上就是把原始类型包裹起来，并保存在堆里。
+    因此，装箱后的值需要更多的内存，并需要额外的内存搜索来获取被包裹的原始值。
+    比如下面这个，是没有装箱的：
+    IntPredicate evenNumbers = (int i) -> i % 2 == 0;
+    evenNumbers.test(1000);
+    下面这个，是有装箱的：
+    Predicate<Integer> oddNumbers = (Integer i) -> i % 2 == 1;
+    oddNumbers.test(1000);
+    */
 
     public static void main(String[] args) {
 
@@ -32,4 +43,5 @@ public class NumericStreamTest {
                 .forEach(r -> System.out.println("a=" + r[0] + ",b=" + r[1] + ",c=" + r[2]));
 
     }
+
 }
