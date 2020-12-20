@@ -1,6 +1,5 @@
-package com.frog.study.stream;
+package com.frog.study.lambda.function;
 
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**

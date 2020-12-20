@@ -1,4 +1,4 @@
-package com.frog.study.stream;
+package com.frog.study.lambda.function;
 
 import java.util.ArrayList;
 import java.util.List;

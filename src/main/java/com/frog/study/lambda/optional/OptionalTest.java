@@ -1,4 +1,4 @@
-package com.frog.study.stream;
+package com.frog.study.lambda.optional;
 
 import com.frog.study.base.Car;
 import com.frog.study.base.Insurance;

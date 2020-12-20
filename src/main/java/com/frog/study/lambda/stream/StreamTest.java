@@ -1,4 +1,4 @@
-package com.frog.study.stream;
+package com.frog.study.lambda.stream;
 
 import com.frog.study.Student;
 
