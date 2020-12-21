@@ -1,0 +1,17 @@
+executorService线程池，forkJoin线程池，parallelStream并行流综合测试
+
+1.我们创建一个Calculate接口,用来计算数组元素求和
+2.创建ExecutorServiceCalculator类(用于测试executorService线程池)
+3.创建ForkJoinCalculator类(用于测试forkjoin线程池)
+4.executorService线程池，forkJoin线程池，parallelStream并行流综合测试
+5.测试结果
+数组[一百万数据],for循环用了3ms,executorService用了7ms,forkJoin用了66ms,parallelStream用了18ms
+数组[一千万数据],for循环用了7ms,executorService用了64ms,forkJoin用了342ms,parallelStream用了120ms
+数组[一亿数据],for循环用了50ms,executorService用了61ms,forkJoin用了779ms,parallelStream用了61ms
+数组[十亿数据],因为这里初始化时是使用的是LongStream获取数组，所以生成不了报错了，暂时不测试了。
+
+我们知道forkjoin框架很强大，但是下发任务，合并任务，都需要占用底层资源。
+在处理轻量级任务时，反而直接使用executorService线程池性能会更好一点。
+forkjoin框架是对executorService线程池的补充，但并不是所有情况下都适合使用这种方式。
+需要提到一点的是，java8的parallelStream虽然底层使用的是forkjoin框架，
+但在各方面做了不少优化，在应对各种情况下，都很稳定，推荐使用！
