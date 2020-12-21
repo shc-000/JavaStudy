@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
  */
 public class Collector3Test {
     public static void main(String[] args) {
+        toConcurrentMapWithBinaryOperator(buildStudentList());
+        toConcurrentMap(buildStudentList());
+
         summarizingDouble(buildStudentList());
 
         reducingBinaryOperatorAndIdentiy(buildStudentList());
@@ -34,9 +37,23 @@ public class Collector3Test {
                 new Student("西施", 16, "女", "南开"));
     }
 
-    private static void summarizingDouble(List<Student> students){
+    private static void toConcurrentMapWithBinaryOperator(List<Student> students) {
+        //统计每个学校的人数
+        Optional.ofNullable(students.stream().collect(Collectors.toConcurrentMap(Student::getSchool, v -> 1L, (a, b) -> a + b))).ifPresent(System.out::println);
+    }
+
+    private static void toConcurrentMap(List<Student> students) {
+        //key冲突则覆盖(key1, key2) -> key2
+        Optional.ofNullable(students.stream().collect(Collectors.toConcurrentMap(Student::getSchool, Student::getAge, (key1, key2) -> key2))).ifPresent(System.out::println);
+    }
+
+    private static void toCollection(List<Student> students) {
+        students.stream().collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    private static void summarizingDouble(List<Student> students) {
         //返回数据统计信息
-       Optional.ofNullable(students.stream().collect(Collectors.summarizingDouble(Student::getAge))).ifPresent(System.out::println);
+        Optional.ofNullable(students.stream().collect(Collectors.summarizingDouble(Student::getAge))).ifPresent(System.out::println);
     }
 
     private static void reducingBinaryOperatorAndIdentiy(List<Student> students) {
