@@ -15,17 +15,25 @@ import java.util.function.Predicate;
             两个条件必须同时满足
      */
 public class Predicate02Test {
-    public static boolean checkString(String s, Predicate<String> pred1, Predicate<String> pred2){
+    //    默认方法:and
+//        两个条件必选同时满足
+
+    /*default Predicate<T> and(Predicate<? super T> other) {
+        Objects.requireNonNull(other);
+        return (t) ‐> test(t) && other.test(t);
+    }*/
+    public static boolean checkString(String s, Predicate<String> pred1, Predicate<String> pred2) {
         return pred1.and(pred2).test(s);
         // 等价于return pre1.test(s) && pre2.test(s);
     }
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         //定义一个字符串
         String s = "abcdef";
         // 调用方法,进行判断
-        boolean b = checkString(s,(String str) ->{
-            return str.length()>5;
-        }, (String str) ->{
+        boolean b = checkString(s, (String str) -> {
+            return str.length() > 5;
+        }, (String str) -> {
             return str.contains("a");
         });
         System.out.println(b);

@@ -2,6 +2,7 @@ package com.frog.study.functionInterface;
 
 import java.util.ArrayList;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * @author shaohaichao
@@ -28,31 +29,32 @@ public class Predicate05Test {
         传递两个Predicate接口,用于对数组中的信息进行过滤
         把满足条件的信息存到ArrayList集合中并返回
      */
-    public static ArrayList<String> filter(String[] arr, Predicate<String> pre1, Predicate<String> pre2){
+    public static ArrayList<String> filterTest(String[] arr, Predicate<String> pre1, Predicate<String> pre2) {
         //定义一个ArrayList集合,存储过滤之后的信息
         ArrayList<String> list = new ArrayList<>();
         //遍历数组,获取数组中的信息
-        for(String s:arr){
+        for (String s : arr) {
             //使用Predicate接口中的方法test对获取的字符串进行判断
             boolean b = pre1.and(pre2).test(s);
             //对布尔值进行判断
-            if(b){
+            if (b) {
                 //存储到list中
                 list.add(s);
             }
         }
         return list;
     }
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         //定义一个存储字符串的数组
-        String[] array = { "迪丽热巴,女", "古力娜扎,女", "马尔扎哈,男", "赵丽颖,女" };
-        ArrayList<String> list = filter(array, (String s)->{
+        String[] array = {"迪丽热巴,女", "古力娜扎,女", "马尔扎哈,男", "赵丽颖,女"};
+        ArrayList<String> list = filterTest(array, (String s) -> {
             return s.split(",")[1].equals("女");
-        }, (String s) ->{
-            return s.split(",")[0].length()==4;
+        }, (String s) -> {
+            return s.split(",")[0].length() == 4;
         });
         //遍历集合
-        for (String s:list){
+        for (String s : list) {
             System.out.println(s);
         }
     }
