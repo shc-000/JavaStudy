@@ -14,6 +14,7 @@ import java.util.function.Predicate;
  */
 public class MyStreamTest {
 
+
     /**
      * 按照对象的属性或者属性的组合信息去重复，目前stream的distinct不支持，现在基于filter作出扩展方法
      */

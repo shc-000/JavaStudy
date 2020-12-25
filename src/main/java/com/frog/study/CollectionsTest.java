@@ -1,7 +1,14 @@
 package com.frog.study;
 
+import com.baomidou.mybatisplus.extension.api.R;
+import org.junit.Test;
+
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author shaohaichao
@@ -87,5 +94,50 @@ public class CollectionsTest {
         });
         set.addAll(orderList);
         return new ArrayList<Student>(set);
+    }
+
+    /**
+     * 按照对象的属性或者属性的组合信息去重复，目前stream的distinct不支持，现在基于filter作出扩展方法
+     */
+    static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        //apply将函数应用到参数身上，并返回值
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
+
+    /**
+     * 借助distinctByKey方法，实现基于多个组合属性的去重复操作
+     */
+    private void distinct() {
+        List<Student> students = buildStudentList();
+        students.stream().filter(distinctByKey(s -> s.getAge() + "_" + s.getSchool())).forEach(System.out::println);
+    }
+
+    @Test
+    public void combineStream() {
+        CollectionsTest collectionsTest = new CollectionsTest();
+        List<Student> students = collectionsTest.buildStudentList();
+        List<String> names = students.stream().map(extendMapStr(Student::getName)).collect(Collectors.toList());
+        List<Integer> ages = students.stream().map(extendMapInteger(Student::getAge)).collect(Collectors.toList());
+        System.out.println(names);
+        System.out.println(ages);
+    }
+
+    /**
+     * Function<T,R></>T表示参数，R表示返回值
+     * T1表示该方法是范型方法
+     * T2表示入参数类型，R表示返回值
+     */
+    static <T> Function<? super T, String> extendMapStr(Function<? super T, String> keyExtractor) {
+        return keyExtractor.andThen(x -> x + "test");
+        //return keyExtractor::apply;
+        //上下相等
+//        return keyExtractor;
+    }
+
+    static <T> Function<? super T, Integer> extendMapInteger(Function<? super T, Integer> keyExtractor) {
+        return keyExtractor::apply;
+        //上下相等
+//        return keyExtractor;
     }
 }
