@@ -13,18 +13,19 @@ import java.util.stream.Collectors;
  */
 public class Collector3Test {
     public static void main(String[] args) {
-        toConcurrentMapWithBinaryOperator(buildStudentList());
-        toConcurrentMap(buildStudentList());
-
-        summarizingDouble(buildStudentList());
-
-        reducingBinaryOperatorAndIdentiy(buildStudentList());
-        reducingBinaryOperator(buildStudentList());
-        partitioningByWithPredicate(buildStudentList());
-
-        joiningWithDelimiterAndPrefixAndSuffix(buildStudentList());
-        maxBy(buildStudentList());
-        minBy(buildStudentList());
+//        toConcurrentMapWithBinaryOperator(buildStudentList());
+//        toConcurrentMap(buildStudentList());
+//
+//        summarizingDouble(buildStudentList());
+//
+//        reducingBinaryOperatorAndIdentiy(buildStudentList());
+//        reducingBinaryOperator(buildStudentList());
+//        partitioningByWithPredicate(buildStudentList());
+//
+//        joiningWithDelimiterAndPrefixAndSuffix(buildStudentList());
+//        maxBy(buildStudentList());
+//        minBy(buildStudentList());
+        reduce();
     }
 
     private static List<Student> buildStudentList() {
@@ -35,6 +36,16 @@ public class Collector3Test {
                 new Student("昭君", 19, "女", "清华"),
                 new Student("貂蝉", 18, "女", "北大"),
                 new Student("西施", 16, "女", "南开"));
+    }
+
+    /**
+     * 字符串拼接
+     */
+    private static void reduce() {
+        List<Integer> demo = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8);
+        //数字转化为字符串，然后使用“-”拼接起来
+        String data = demo.stream().reduce("0", (u, t) -> u + "-" + t, (s1, s2) -> s1 + "-" + s2);
+        System.out.println(data);
     }
 
     private static void toConcurrentMapWithBinaryOperator(List<Student> students) {
