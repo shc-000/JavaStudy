@@ -7,8 +7,7 @@ import java.util.function.Function;
  * @version 2.0.0
  * @since 2020/12/21 10:26 下午
  */
-//java.util.function.Function<T, R>接口用来根据一个类型的数据得到另一个类型的数据, 前者是前置条件,周这是后置条件
-//
+//java.util.function.Function<T, R>接口用来根据一个类型的数据得到另一个类型的数据, 前者是前置条件,后者是后置条件
 //抽象方法: apply
 public class Demo01Function {
     /*
@@ -27,7 +26,7 @@ public class Demo01Function {
         //定义一个字符串类型的整数
         String s = "1234";
         //调用change方法,传递字符串类型的整数,和Lambda表达式
-        change(s,(String str)->{
+        change(s,(String str)->{//s即str
             //把字符串类型的整数,转换为Integer类型的整数返回
             return Integer.parseInt(str);
         });

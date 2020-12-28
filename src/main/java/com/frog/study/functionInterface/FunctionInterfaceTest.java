@@ -14,4 +14,12 @@ public interface FunctionInterfaceTest {
 
     @Override
     boolean equals(Object obj); //Object中的方法
+
+    default void print() {
+        System.out.println("test");
+    }
+
+    static void identity() {
+        System.out.println("identity");
+    }
 }

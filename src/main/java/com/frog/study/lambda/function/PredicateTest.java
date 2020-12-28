@@ -11,6 +11,7 @@ public class PredicateTest {
     public static void main(String[] args) {
         //函数作为参数传递
         int result = find(new Integer[]{1, 2, 3, 4, 5, 6}, -1, i -> i < 10);
+        System.out.println(result);
     }
 
     private static int find(Integer[] values, int defaultValue, Predicate<Integer> predicate) {
