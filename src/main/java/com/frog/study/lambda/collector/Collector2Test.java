@@ -78,7 +78,7 @@ public class Collector2Test {
         //System.out.println(umModifyList);
     }
 
-    private static void counting(List<Student> students){
+    private static void counting(List<Student> students) {
         Optional.ofNullable(students.stream().collect(Collectors.counting())).ifPresent(System.out::println);
 //        相当于,只不过上面的在collect中，计算后还可以做别的操作
         Optional.ofNullable(students.stream().count()).ifPresent(System.out::println);
@@ -87,21 +87,49 @@ public class Collector2Test {
     /**
      * 按照条件分组
      */
-    private static void groupByFunction(List<Student> students){
+    private static void groupByFunction(List<Student> students) {
         //按照类型分组
-        Map<String,List<Student>> stuMap = students.stream().collect(Collectors.groupingBy(Student::getSchool));
+        Map<String, List<Student>> stuMap = students.stream().collect(Collectors.groupingBy(Student::getSchool));
         System.out.println(stuMap);
 
+        //按照组合属性分组
+        Map<String, List<Student>> stuMap1 = students.stream().collect(Collectors.groupingBy(student -> student.getSchool() + "_" + student.getName()));
+        System.out.println("按照组合属性分组" + stuMap1);
+
+        //按照不同条件分组
+        Map<String, List<Student>> stuMap2 = students.stream().collect(Collectors.groupingBy(student -> {
+            if (student.getAge() > 18) {
+                return "成年";
+            } else {
+                return "未成年";
+            }
+        }));
+        System.out.println("按照不同条件分组" + stuMap2);
+
+        //多级分组
+        Map<String, Map<String, List<Student>>> stuMap3 = students.stream().collect(Collectors.groupingBy(Student::getSchool, Collectors.groupingBy(student -> {
+            if (student.getAge() > 18) {
+                return "成年";
+            } else {
+                return "未成年";
+            }
+        })));
+        System.out.println("多级分组" + stuMap3);
+
         //统计每种分组类型对应多少个数
-        Map<String,Long> mapCount = students.stream().collect(Collectors.groupingBy(Student::getSchool, Collectors.counting()));
+        Map<String, Long> mapCount = students.stream().collect(Collectors.groupingBy(Student::getSchool, Collectors.counting()));
         System.out.println(mapCount);
 
         //统计每种类型的年龄的平均值
-        Map<String,Double> mapAver = students.stream().collect(Collectors.groupingBy(Student::getSchool, Collectors.averagingDouble(Student::getAge)));
+        Map<String, Double> mapAver = students.stream().collect(Collectors.groupingBy(Student::getSchool, Collectors.averagingDouble(Student::getAge)));
         System.out.println(mapAver);
 
+        //统计每个年级的年龄和
+        Map<String, Integer> mapSum = students.stream().collect(Collectors.groupingBy(Student::getSchool, Collectors.summingInt(Student::getAge)));
+
+
         //将返回的结果hashMap转化为treeMap
-        Map<String,Double> treeMapAver = students.stream().collect(Collectors.groupingBy(Student::getSchool, TreeMap::new, Collectors.averagingDouble(Student::getAge)));
+        Map<String, Double> treeMapAver = students.stream().collect(Collectors.groupingBy(Student::getSchool, TreeMap::new, Collectors.averagingDouble(Student::getAge)));
         System.out.println(treeMapAver);
 
     }

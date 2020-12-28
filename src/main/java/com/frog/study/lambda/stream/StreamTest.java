@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -23,7 +24,8 @@ public class StreamTest {
 //        flatMap();
 //        distinct();
 //        reUseStream();
-        peek();
+//        peek();
+        filterTest();
     }
 
     private static List<Student> buildStudentList() {
@@ -34,6 +36,17 @@ public class StreamTest {
                 new Student("昭君", 19, "女", "清华"),
                 new Student("貂蝉", 18, "女", "北大"),
                 new Student("西施", 16, "女", "南开"));
+    }
+
+    /**
+     * 多条件的filter
+     */
+    private static void filterTest() {
+        List<Student> students = buildStudentList();
+//        Predicate是函数式接口，可以直接用lambda代替；如果有复杂的过滤逻辑，则用or、and、negate方法组合
+        Predicate<Student> f1 = student -> student.getName().equals("张三");
+        Predicate<Student> f2 = student -> student.getName().equals("李斯");
+        students.stream().filter(f1.or(f2)).forEach(System.out::println);
     }
 
     private static void skipVsLimit() {
