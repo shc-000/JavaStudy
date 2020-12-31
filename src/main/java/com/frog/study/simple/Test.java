@@ -21,10 +21,14 @@ public class Test {
     }
 
     public static void main(String[] args) {
-        List<Student> students = buildStudentList();
-        students.forEach(student -> {
-            student.setAge(66);
-        });
-        System.out.println(students);
+//        List<Student> students = buildStudentList();
+//        students.forEach(student -> {
+//            student.setAge(66);
+//        });
+//        System.out.println(students);
+
+        String aa = "ABS_HH_123";
+        String newName = aa.substring(aa.lastIndexOf("_")+1);
+        System.out.println(newName);
     }
 }

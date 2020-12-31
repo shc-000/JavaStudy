@@ -90,7 +90,7 @@ public class StreamTest {
     private static void reUseStream() {
         List<Student> students = buildStudentList();
         //后面可接别的操作
-        Supplier<Stream<Student>> supplierStudentStream = students::stream;
+        Supplier<Stream<Student>> supplierStudentStream = students.stream().collect(Collectors.toList())::stream;
         supplierStudentStream.get().forEach(System.out::println);
         System.out.println("----------------");
         supplierStudentStream.get().forEach(System.out::println);
