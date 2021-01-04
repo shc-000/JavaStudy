@@ -4,6 +4,7 @@ import com.frog.study.Student;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BinaryOperator;
 
 /**
  * @author haichao.shao (shaohaichao@shanshu.ai)
