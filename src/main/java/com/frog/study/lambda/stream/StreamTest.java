@@ -1,6 +1,7 @@
 package com.frog.study.lambda.stream;
 
 import com.frog.study.Student;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,9 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import java.util.function.IntUnaryOperator;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -143,5 +146,20 @@ public class StreamTest {
             newLeft.addAll(right);
             return newLeft;
         });
+    }
+
+    /**
+     * 两个、三个集合按照相同下标求和
+     */
+    private List<Integer> calcTargetStock(List<Integer> inventoryPlans, List<Integer> demandPlans, List<Integer> dependentDemandPlans) {
+        IntUnaryOperator operator;
+        if (CollectionUtils.isEmpty(dependentDemandPlans)) {
+            //无下级仓需求计划
+            operator = i -> demandPlans.get(i) + inventoryPlans.get(i);
+        } else {
+            //有下级仓需求计划
+            operator = i -> demandPlans.get(i) + inventoryPlans.get(i) + dependentDemandPlans.get(i);
+        }
+        return IntStream.range(0, demandPlans.size()).map(operator).boxed().collect(Collectors.toList());
     }
 }

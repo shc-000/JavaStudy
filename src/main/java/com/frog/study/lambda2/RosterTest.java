@@ -1,4 +1,4 @@
-package com.shc.test;
+package com.frog.study.lambda2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,8 +9,7 @@ import java.util.function.Predicate;
 
 /**
  * @author haichao.shao (shaohaichao@shanshu.ai)
- * @see -https://zhuanlan.zhihu.com/p/102716267
- * @since 2021/1/4
+ * @since 2021/1/24
  */
 public class RosterTest {
     interface CheckPerson {
@@ -18,7 +17,7 @@ public class RosterTest {
     }
 
     /**
-     * 1. eg：输出年龄大于20岁的成员
+     * 1.输出年年龄⼤大于20岁的成员
      */
     public static void printPersonsOlderThan(List<Person> roster, int age) {
         for (Person p : roster) {
@@ -29,9 +28,9 @@ public class RosterTest {
     }
 
     /**
-     * 2. eg:输出年龄在14到30岁之间的成员
+     * 2.输出年龄在14到30岁之间的成员
      * 更全面的匹配方法
-     * 如果老板只要男性成员呢？
+     * 如果老板只要男性成员呢？普通做法越来越复杂
      */
     public static void printPersonsWithinAgeRange(
             List<Person> roster, int low, int high) {
@@ -43,11 +42,9 @@ public class RosterTest {
     }
 
     /**
-     * 3. eg:老板又提出了各种复杂的需求，不要处女座的、只要邮箱是163的，怎么搞？
-     * 方法1：在本地类中指定搜索条件代码，通过接口方式，不同的需求对应不同的实现类，
-     * 每次都要新建实现类，写大量的代码
-     * 方法2：在匿名类中指定搜索条件代码，不需要写各种实现，但是还要写个interface CheckPerson，
-     * 而且匿名类写起来也挺麻烦
+     * 3.老板又提出了各种复杂的需求，不要处女座的、只要邮箱是163的，怎么搞？
+     * 方法1：在本地类中指定搜索条件代码，通过接口方式，不同的需求对应不同的实现类，每次都要新建实现类，写大量的代码
+     * 方法2：在匿名类中指定搜索条件代码，不需要写各种实现，但是还要写个interface CheckPerson，而且匿名类写起来也挺麻烦
      * 方法3：Lambda表达式是懒人的不二之选，CheckPerson是一个只包含一个抽象方法的接口，
      * 比较简单，Lambda可以省略其实现
      */
@@ -61,7 +58,7 @@ public class RosterTest {
     }
 
     /**
-     * 4. eg: 搞这么久，还得写一个接口，而且是只有一个抽象方法，还是不爽？
+     * 4.搞这么久，还得写一个接口，而且是只有一个抽象方法，还是不爽？
      * 你也可以使用标准的函数接口来代替接口CheckPerson，从而进一步减少所需的代码量
      * java.util.function包中定义了标准的函数接口
      * 我们可以使用JDK8提供的 Predicate<T>接口来代替CheckPerson。
@@ -93,7 +90,7 @@ public class RosterTest {
     }
 
     /**
-     * 6. eg: 老板说了只想看到邮箱
+     * 6.老板说了只想看到邮箱
      * Function<T,R>接口，相当于输入类型，mapper定义参数，block负责方对给定的参数进行执行
      */
     public static void processPersonsWithFunction(
@@ -109,7 +106,9 @@ public class RosterTest {
         }
     }
 
-    // 7. 使用泛型
+    /**
+     * 7. 使用泛型
+     */
     public static <X, Y> void processElements(
             Iterable<X> source,
             Predicate<X> tester,
@@ -126,109 +125,93 @@ public class RosterTest {
     public static void main(String[] args) {
         List<Person> roster = Person.createRoster();
 
-        /**
-         * 1. 输出年龄大于20岁的成员
-         */
         System.out.println("Persons older than 20:");
+        //1. 输出年龄大于20岁的成员
         printPersonsOlderThan(roster, 20);
         System.out.println();
 
-        /**
-         * 2. 输出年龄在14到30岁之间的成员
-         */
         System.out.println("Persons between the ages of 14 and 30:");
+        //2. 输出年龄在14到30岁之间的成员
         printPersonsWithinAgeRange(roster, 14, 30);
         System.out.println();
 
-        /**
-         * 3. 输出年龄在18到25岁的男性成员
-         * （在本地类中指定搜索条件）
-         *   您可以使用一个匿名类而不是一个本地类，并且不必为每个搜索声明一个新类
-         */
+
         System.out.println("Persons who are eligible for Selective Service:");
+        //3.0（在本地类中指定搜索条件） 您可以使用一个匿名类而不是一个本地类，并且不必为每个搜索声明一个新类
         class CheckPersonEligibleForSelectiveService implements CheckPerson {
+            @Override
             public boolean test(Person p) {
-                return p.getGender().equals("MALE")
+                return "MALE".equals(p.getGender())
                         && p.getAge() >= 18
                         && p.getAge() <= 25;
             }
         }
-
-        // 这个其实就是通过行为参数化传递代码
+        //3.1 输出年龄在18到25岁的男性成员,这个其实就是通过行为参数化传递代码
         printPersons(
                 roster, new CheckPersonEligibleForSelectiveService());
-
         System.out.println();
 
-        // 3. 在匿名类中指定搜索条件代码
+        //3.2 在匿名类中指定搜索条件代码
         System.out.println("Persons who are eligible for Selective Service " +
                 "(anonymous class):");
         printPersons(
                 roster,
                 new CheckPerson() {
+                    @Override
                     public boolean test(Person p) {
-                        return p.getGender().equals("MALE")
+                        return "MALE".equals(p.getGender())
                                 && p.getAge() >= 18
                                 && p.getAge() <= 25;
                     }
                 }
         );
-
         System.out.println();
 
-        // 3: 使用Lambda表达式简化代码，一个箭头
+        //3.3 使用Lambda表达式简化代码，一个箭头
         System.out.println("Persons who are eligible for Selective Service " +
                 "(lambda expression):");
-
         printPersons(
                 roster,
-                (Person p) -> p.getGender().equals("MALE")
+                (Person p) -> "MALE".equals(p.getGender())
                         && p.getAge() >= 18
                         && p.getAge() <= 25
         );
-
         System.out.println();
 
         // 4. 使用Lambda的标准功能接口
         System.out.println("Persons who are eligible for Selective Service " +
                 "(with Predicate parameter):");
-
         printPersonsWithPredicate(
                 roster,
-                p -> p.getGender().equals("MALE")
+                p -> "MALE".equals(p.getGender())
                         && p.getAge() >= 18
                         && p.getAge() <= 25
         );
-
         System.out.println();
 
         //5.使用Predicate和Consumer参数
         System.out.println("5. Persons who are eligible for Selective Service " +
                 "(with Predicate and Consumer parameters):");
-
         processPersons(
                 roster,
-                p -> p.getGender().equals("MALE")
+                p -> "MALE".equals(p.getGender())
                         && p.getAge() >= 18
                         && p.getAge() <= 25,
-                p -> p.printPerson()
+                Person::printPerson
         );
-
         System.out.println();
 
         // 6. 通过Function<T,R> 指定输出类型
         System.out.println("Persons who are eligible for Selective Service " +
                 "(with Predicate, Function, and Consumer parameters):");
-
         processPersonsWithFunction(
                 roster,
-                p -> p.getGender().equals("MALE")
+                p -> "MALE".equals(p.getGender())
                         && p.getAge() >= 18
                         && p.getAge() <= 25,
-                p -> p.getEmailAddress(),
-                email -> System.out.println(email)
+                Person::getEmailAddress,
+                System.out::println
         );
-
         System.out.println();
 
         // 7. 使用泛型
@@ -237,33 +220,29 @@ public class RosterTest {
 
         processElements(
                 roster,
-                p -> p.getGender().equals("MALE")
+                p -> "MALE".equals(p.getGender())
                         && p.getAge() >= 18
                         && p.getAge() <= 25,
-                p -> p.getEmailAddress(),
-                email -> System.out.println(email)
+                Person::getEmailAddress,
+                System.out::println
         );
-
         System.out.println();
 
         // 8: 使用接受Lambda表达式的批量数据操作
         System.out.println("Persons who are eligible for Selective Service " +
                 "(with bulk data operations):");
-
         roster.stream()
                 .filter(
-                        p -> p.getGender().equals("MALE")
+                        p -> "MALE".equals(p.getGender())
                                 && p.getAge() >= 18
                                 && p.getAge() <= 25)
-                .map(p -> p.getEmailAddress())
-                .forEach(email -> System.out.println(email));
+                .map(Person::getEmailAddress)
+                .forEach(System.out::println);
         System.out.println();
 
-        /**
-         *  9. 按年龄排序。Java 8 之前需要实现 Comparator 接口
-         *  接口比较器是一个功能接口。因此，
-         *  可以使用lambda表达式来代替定义并创建一个实现了Comparator的类的新实例:
-         */
+        //9. 按年龄排序。Java 8 之前需要实现 Comparator 接口
+        // 接口比较器是一个功能接口。因此，
+        //可以使用lambda表达式来代替定义并创建一个实现了Comparator的类的新实例:
         Person[] rosterAsArray = roster.toArray(new Person[roster.size()]);
 
         Arrays.sort(rosterAsArray,
@@ -285,7 +264,7 @@ public class RosterTest {
 
         /**
          *  ===================================================================
-         *  方法引用：
+         * 方法引用：
          * 这个lambda表达式调用现有的方法，所以您可以使用方法引用而不是lambda表达式
          *  Person::compareByAge 等同于 (a, b) -> Person.compareByAge(a, b)
          */
