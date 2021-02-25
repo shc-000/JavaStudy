@@ -1,12 +1,11 @@
 package com.frog.study.threadAndStream;
 
 import com.frog.study.Student;
+import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 /**
@@ -17,6 +16,8 @@ import java.util.stream.Collectors;
  * @since 2020/12/28 9:15 下午
  */
 public class Test {
+    public final static BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>();
+
     private static List<Student> buildStudentList() {
         return Arrays.asList(new Student("张三", 18, "男", "清华"),
                 new Student("李斯", 19, "男", "清华"),
@@ -29,8 +30,9 @@ public class Test {
 
     public static void main(String[] args) {
         List<Student> list = buildStudentList();
-        ExecutorService executor = Executors.newFixedThreadPool(Math.min(list.size(), 100));
-
+        //线程设置名字
+        ThreadFactory springThreadFactory = new CustomizableThreadFactory("shc-thread-pool-");
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(list.size(), 100, 1, TimeUnit.MINUTES, queue, springThreadFactory);
         list.stream().map(a -> CompletableFuture.supplyAsync(() -> {
             // 操作代码.....
             try {
@@ -39,6 +41,6 @@ public class Test {
                 e.printStackTrace();
             }
             return a;
-        }, executor)).collect(Collectors.toList()).stream().map(CompletableFuture::join).collect(Collectors.toList());
+        }, threadPoolExecutor)).collect(Collectors.toList()).stream().map(CompletableFuture::join).collect(Collectors.toList());
     }
 }

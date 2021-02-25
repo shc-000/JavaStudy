@@ -13,8 +13,6 @@
         <mybatis.version>2.0.1</mybatis.version>
         <mybatis-plus-boot-starter.version>3.3.2</mybatis-plus-boot-starter.version>
         <mybatis-plus-generator.version>3.3.2</mybatis-plus-generator.version>
-        <junit.version>5.6.2</junit.version>
-        <testable.version>0.4.5</testable.version>
     </properties>
     <build>
         <plugins>
@@ -24,15 +22,6 @@
                 <configuration>
                     <source>8</source>
                     <target>8</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <argLine>
-                        -javaagent:${settings.localRepository}/com/alibaba/testable/testable-agent/${testable.version}/testable-agent-${testable.version}.jar
-                    </argLine>
                 </configuration>
             </plugin>
         </plugins>
@@ -72,30 +61,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.11.1</version>
-        </dependency>
-        <!--        mock-->
-        <!-- 学习地址 https://alibaba.github.io/testable-mock/#/zh-cn/doc/setup-->
-        <dependency>
-            <groupId>com.alibaba.testable</groupId>
-            <artifactId>testable-all</artifactId>
-            <version>${testable.version}</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

@@ -5,8 +5,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.util.StringUtils;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -123,5 +126,15 @@ public class Test {
             e.printStackTrace();
         }
 
+    }
+
+    @org.junit.Test
+    public void testDate(){
+        //3个月前的1号
+        LocalDate date = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).minusMonths(3);
+
+        LocalDate date1 = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        //当周周一
+        LocalDate date2 = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
     }
 }

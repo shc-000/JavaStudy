@@ -1,5 +1,6 @@
 package com.frog.study.future;
 
+import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -7,19 +8,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
 
+/**
+ * @author shaohaichao
+ * @version 2.0.0
+ * @since 2020/12/28 9:15 下午
+ */
 public class CallableServiceTest {
 
     private static final int FUTURE_TIMEOUT = 15000;
 
-    // 使用先进先出的队列
-    public final static BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>();
-    // 执行callable的线程池
-    public static ExecutorService executorService = new ThreadPoolExecutor(5,
-            15,
-            10,
-            TimeUnit.SECONDS,
-            queue);
+    private final static BlockingQueue<Runnable> QUEUE = new LinkedBlockingQueue<>();
 
+    /**
+     * 执行callable的线程池
+     */
+    private static final ThreadFactory SPRING_THREAD_FACTORY = new CustomizableThreadFactory("shc-thread-pool-");
+    private final static ThreadPoolExecutor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(5, 15, 1, TimeUnit.MINUTES, QUEUE, SPRING_THREAD_FACTORY);
 
     public List<String> getCallableData(List<String> requestUrlList) {
 
@@ -33,7 +37,7 @@ public class CallableServiceTest {
             FutureTask<String> futureTask = new FutureTask<>(callable);
             futureTaskList.add(futureTask);
             // 线程池开始获取数据
-            executorService.submit(futureTask);
+            THREAD_POOL_EXECUTOR.submit(futureTask);
         }
 
         // 获取数据
@@ -62,8 +66,7 @@ public class CallableServiceTest {
     public static void main(String[] args) {
         CallableServiceTest test = new CallableServiceTest();
         test.getCallableData(Arrays.asList("url", "url")).forEach(System.out::println);
-
         //关闭线程池
-        executorService.shutdownNow();
+        THREAD_POOL_EXECUTOR.shutdownNow();
     }
 }
