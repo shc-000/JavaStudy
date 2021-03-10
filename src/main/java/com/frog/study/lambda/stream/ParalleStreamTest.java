@@ -1,8 +1,6 @@
 package com.frog.study.lambda.stream;
 
-
 import org.junit.rules.Stopwatch;
-
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -19,8 +17,8 @@ import java.util.stream.Stream;
  */
 public class ParalleStreamTest {
     //并发流和CompletableFuture的配合使用
-    public static void main(String[] args)  throws Exception{
-        /*List<Integer> demo = Stream.iterate(0, item -> item + 1)
+    /*public static void main(String[] args)  throws Exception{
+        List<Integer> demo = Stream.iterate(0, item -> item + 1)
                 .limit(5)
                 .collect(Collectors.toList());
         //示例1
@@ -53,6 +51,5 @@ public class ParalleStreamTest {
         });
         System.out.println("示例3-"+stopwatch.stop().elapsed(TimeUnit.MILLISECONDS));
         executor.shutdown();
-*/
-    }
+    }*/
 }

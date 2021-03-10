@@ -2,16 +2,12 @@ package com.frog.study.lambda.stream;
 
 import com.frog.study.Student;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+import com.alibaba.fastjson.JSON;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.IntUnaryOperator;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -28,7 +24,8 @@ public class StreamTest {
 //        distinct();
 //        reUseStream();
 //        peek();
-        filterTest();
+//        filterTest();
+        calcMore();
     }
 
     private static List<Student> buildStudentList() {
@@ -161,5 +158,66 @@ public class StreamTest {
             operator = i -> demandPlans.get(i) + inventoryPlans.get(i) + dependentDemandPlans.get(i);
         }
         return IntStream.range(0, demandPlans.size()).map(operator).boxed().collect(Collectors.toList());
+    }
+
+    /**
+     * 多个list对应列下标累加
+     */
+    private static void calcMore() {
+        List<String> jsonArr = new ArrayList<>();
+        String json = "{22:[100,100,100,200,300,400,500,1]}";
+        String json2 = "{22:[100,100,100,200,300,400,500,2]}";
+        String json3 = "{22:[100,100,100,200,300,400,500,3]}";
+        jsonArr.add(json);
+        jsonArr.add(json2);
+        jsonArr.add(json3);
+
+        List<Integer> result = new ArrayList<>();
+
+        jsonArr.stream().map(str -> jsonToMap(str).get(22)).forEach(r -> forEach(0, r, (index, item) -> result.set(index, item + fetchById(result, index))));
+        System.out.println(result);
+    }
+
+    static int fetchById(List<Integer> list, int i) {
+        if (CollectionUtils.isEmpty(list) || list.size() - 1 < i) {
+            return 0;
+        }
+        return list.get(i);
+    }
+
+    static Map<Integer, List<Integer>> jsonToMap(String jsonValue) {
+        if (StringUtils.isEmpty(jsonValue)) {
+            return Collections.emptyMap();
+        }
+        return JSON.parseObject(jsonValue, LinkedHashMap.class);
+    }
+
+    static <T> Function<? super T, String> extendMapStr(Function<? super T, String> keyExtractor) {
+        return keyExtractor.andThen(x -> x + "test");
+        //return keyExtractor::apply;
+        //上下相等
+//        return keyExtractor;
+    }
+
+    /**
+     * @param <T>
+     * @param startIndex 开始遍历的索引
+     * @param elements   集合
+     * @param action
+     */
+    public static <T> void forEach(int startIndex, Iterable<? extends T> elements, BiConsumer<Integer, ? super T> action) {
+        Objects.requireNonNull(elements);
+        Objects.requireNonNull(action);
+        if (startIndex < 0) {
+            startIndex = 0;
+        }
+        int index = 0;
+        for (T element : elements) {
+            index++;
+            if (index <= startIndex) {
+                continue;
+            }
+            action.accept(index - 1, element);
+        }
     }
 }
