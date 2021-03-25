@@ -13,6 +13,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -136,5 +137,15 @@ public class Test {
         LocalDate date1 = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         //当周周一
         LocalDate date2 = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+    }
+
+    @org.junit.Test
+    public void testInit(){
+        int[] arr = new int[3];
+        for (int i=0;i<arr.length;i++){
+            System.out.println(arr[i]);
+        }
+        List<Integer> list = Arrays.stream(arr).boxed().collect(Collectors.toList());
+        System.out.println(list);
     }
 }
