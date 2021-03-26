@@ -2,6 +2,7 @@ package com.frog.study.design;
 
 /**
  * 策略模式+枚举
+ * 消灭硬编码风格的if else条件判断
  *
  * @author haichao.shao (shaohaichao@shanshu.ai)
  * @since 2021/3/25
@@ -20,6 +21,17 @@ enum NOTIFY_TYPE {    //1、定义一个包含通知实现机制的“充血”�
     }
     //getters ...
 }
+
+/*
+为什么 if-else这个看上去人畜无害的东西是有害的、是需要严格管控的：
+1.if else if ...else以及类似的switch控制语句，本质上是一种hard coding硬编码行为，
+如果你同意“magic number魔法数字”是一种错误的编程习惯，那么同理，if else也是错误的hard coding编程风格；
+2.hard coding的问题在于当需求发生改变时，需要到处去修改，很容易遗漏和出错；
+
+如果if判断的变量状态只有两种可能性（比如boolean、比如null判断）时，是无伤大雅的；
+反之，如果if判断的变量存在多种状态，而且将来可能会增加新的状态，那么这就是个问题；
+switch判断语句无疑是有害的，因为使用switch的地方往往存在很多种状态。*/
+
 
 interface NotifyMechanismInterface { //3、定义通知机制的接口或抽象父类
     public boolean doNotify(String msg);
