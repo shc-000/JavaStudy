@@ -1,6 +1,5 @@
 package com.frog.study;
 
-import com.baomidou.mybatisplus.extension.api.R;
 import org.junit.Test;
 
 import java.util.*;
@@ -8,7 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author shaohaichao
@@ -28,6 +26,23 @@ public class CollectionsTest {
         List<Student> students = collectionsTest.buildStudentList();
 //        collectionsTest.sort(students);
         collectionsTest.merge();
+    }
+
+    public void combine() {
+        List<Student> list = buildStudentList();
+        Map<String, List<String>> map = list.stream().collect(Collectors.toMap(Student::getName,
+        // 此时的value 为集合，方便重复时操作
+                s -> {
+                    List<String> studentNameList = new ArrayList<>();
+                    studentNameList.add(s.getSchool());
+                    return studentNameList;
+                },
+        // 重复时将现在的值全部加入到之前的值内
+                (List<String> value1, List<String> value2) -> {
+                    value1.addAll(value2);
+                    return value1;
+                }
+        ));
     }
 
     private void sort(List<Student> students) {

@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @Author xiongyx
+ * @Author xiongyxÅ
  * on 2019/3/8.
  */
 public class FlatMapTest {

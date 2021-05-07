@@ -5,9 +5,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
@@ -22,6 +24,64 @@ import java.util.stream.Stream;
  */
 public class Test {
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    @org.junit.Test
+    public void nowDay1() {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startDate = LocalDate.parse("2018-06-01", df);
+        LocalDate endDate = startDate.plusDays(6);
+//        String localTime = df.format(time);
+        System.out.printf(df.format(startDate));
+        System.out.printf(df.format(endDate));
+
+    }
+
+    @org.junit.Test
+    public void getFirstDayInWeek() {
+        Calendar calendar = Calendar.getInstance();
+        //获取当年第几周
+        int weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
+        //获取当周星期几
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        //如果是周日，说明是上周的而不是本周的，要获取到上周，后退一天
+        if (calendar.get(Calendar.DAY_OF_WEEK) == 1) {
+            calendar.add(Calendar.DATE, -1);
+            weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
+            //如果是周日，直接设置星期为7
+            dayOfWeek = 7;
+        } else {
+            //如果不是周日，星期减一
+            dayOfWeek--;
+        }
+        //最终获取周+星期
+        System.out.println(String.format("今天是第%d周，星期%d", weekOfYear, dayOfWeek));
+    }
+
+    @org.junit.Test
+    public void getWeekByDate() {
+        Calendar calendar = Calendar.getInstance();
+        //获取当周星期几
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        //如果是周日，说明是上周的而不是本周的，要获取到上周，后退一天
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            //如果是周日，直接设置星期为7
+            dayOfWeek = 7;
+        } else {
+            //如果不是周日，星期减一
+            dayOfWeek--;
+        }
+        System.out.println(dayOfWeek);
+    }
+
+    @org.junit.Test
+    public void nowDay() {
+        LocalDate from = LocalDate.now();
+        LocalDate monday = from.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY)).plusDays(1);
+
+        LocalDate sunday = from.with(TemporalAdjusters.next(DayOfWeek.MONDAY)).minusDays(1);
+        System.out.println(monday.atTime(7, 0, 0).format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
+        System.out.println(monday + "_" + sunday);
+    }
 
     @org.junit.Test
     public void test() {
@@ -130,7 +190,7 @@ public class Test {
     }
 
     @org.junit.Test
-    public void testDate(){
+    public void testDate() {
         //3个月前的1号
         LocalDate date = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).minusMonths(3);
 
@@ -140,9 +200,9 @@ public class Test {
     }
 
     @org.junit.Test
-    public void testInit(){
+    public void testInit() {
         int[] arr = new int[3];
-        for (int i=0;i<arr.length;i++){
+        for (int i = 0; i < arr.length; i++) {
             System.out.println(arr[i]);
         }
         List<Integer> list = Arrays.stream(arr).boxed().collect(Collectors.toList());
