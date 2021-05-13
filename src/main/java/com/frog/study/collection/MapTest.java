@@ -4,11 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.junit.Test;
+import com.google.common.collect.ImmutableMap;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author haichao.shao (shaohaichao@shanshu.ai)
@@ -129,6 +129,53 @@ public class MapTest {
         studentScoreList.add(studentScore2);
         return studentScoreList;
     }
+
+
+    // 静态Map的初始化，实际情况中，可以使用枚举代替
+    // 方法一
+    public static final Map<Integer, String> myMap_0 = new HashMap<Integer, String>();
+
+    static {
+        myMap_0.put(1, "one");
+        myMap_0.put(2, "two");
+    }
+
+    // 方法二 JDK5
+    public static final Map<Integer, String> myMap_1 = new HashMap<Integer, String>() {{
+        put(1, "one");
+        put(2, "two");
+    }};
+    // 方法三  Guava
+    static final Map<Integer, String> myMap_2 = ImmutableMap.<Integer, String>builder().put(1, "one").put(2, "two").build();
+
+    // 方法四，不超过5个的时候  Guava
+    static final Map<Integer, String> myMap_3 = ImmutableMap.of(
+            1, "one",
+            2, "two"
+    );
+
+    // 方法五  Collections.unmodifiableMap()  通过工具类实现
+
+
+    // 方法六 JDK8
+    static final Map<Integer, String> MY_MAP = Arrays.stream(new Object[][]{
+            {1, "one"},
+            {2, "two"},
+    }).collect(Collectors.toMap(kv -> (Integer) kv[0], kv -> (String) kv[1]));
+
+
+    private static final Map<Integer, String> myMap = Stream.of(
+            new AbstractMap.SimpleEntry<>(1, "one"),
+            new AbstractMap.SimpleEntry<>(2, "two"),
+            new AbstractMap.SimpleEntry<>(3, "three"),
+            new AbstractMap.SimpleEntry<>(4, "four"),
+            new AbstractMap.SimpleEntry<>(5, "five"),
+            new AbstractMap.SimpleEntry<>(6, "six"),
+            new AbstractMap.SimpleEntry<>(7, "seven"),
+            new AbstractMap.SimpleEntry<>(8, "eight"),
+            new AbstractMap.SimpleEntry<>(9, "nine"),
+            new AbstractMap.SimpleEntry<>(10, "ten"))
+            .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
 
     @Data
     public static class StudentScore {

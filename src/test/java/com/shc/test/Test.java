@@ -37,6 +37,17 @@ public class Test {
     }
 
     @org.junit.Test
+    public void testList(){
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+//        Arrays.asList(1,2,3);
+        list.remove(0);
+        System.out.println(list);
+    }
+
+    @org.junit.Test
     public void getFirstDayInWeek() {
         Calendar calendar = Calendar.getInstance();
         //获取当年第几周
