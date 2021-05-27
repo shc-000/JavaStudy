@@ -3,16 +3,17 @@ package com.shc.test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.frog.study.Student;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -92,6 +93,61 @@ public class Test {
         LocalDate sunday = from.with(TemporalAdjusters.next(DayOfWeek.MONDAY)).minusDays(1);
         System.out.println(monday.atTime(7, 0, 0).format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
         System.out.println(monday + "_" + sunday);
+    }
+
+    @org.junit.Test
+    public void nowMap() {
+        /*Map<String, Integer> map =Maps.newHashMap();
+//        map.put("b",1);
+        int a = Optional.ofNullable(map.get("a")).orElse(0);
+        System.out.println(a);
+        int timeWindowLen = 3;
+        int leadTime = 2;
+        for (int i = 0, len = (timeWindowLen - (i + leadTime - 1)); i < len; i++) {
+            System.out.println(i);
+        }*/
+        List<Student> students = Lists.newArrayList();
+        students.add(Student.builder().name("1s").school("ab").age(1).build());
+        students.add(Student.builder().name("2s").school("cd").age(2).build());
+        students.add(Student.builder().name("3s").school("ef").age(3).build());
+        Map<String, Student> studentMap = students.stream().collect(Collectors.toMap(Student::getName, Function.identity()));
+        Student student = studentMap.get("1s");
+        student.setAge(6);
+        studentMap.putIfAbsent("4s",Student.builder().name("4s").school("hi").age(4).build());
+        studentMap.putIfAbsent("2s",Student.builder().name("2s").school("cd").age(2).build());
+//        studentMap.putIfAbsent()
+//        Student.builder().name("1").age(1).build();
+        Calendar calendar = Calendar.getInstance();
+        System.out.println(calendar.get(Calendar.DAY_OF_WEEK));
+        if (Calendar.THURSDAY == calendar.get(Calendar.DAY_OF_WEEK)){
+            System.out.println(123);
+        }
+
+        System.out.println(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.of(LocalDate.now(), LocalTime.MIN)));
+        System.out.println(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now()));
+        Date dateTime = Date.from(LocalDate.parse("2021-05-27").atStartOfDay(ZoneOffset.ofHours(8)).toInstant());
+        System.out.println(dateTime.getDay()+"-"+dateTime.getMonth()+"-"+dateTime.getYear());
+
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(new Date());
+//        long whichDay1 = cal.get(Calendar.DAY_OF_WEEK);
+//        System.out.println(whichDay1);
+//        System.out.println(fetchDayOfWeek(new Date()));
+    }
+
+    protected int fetchDayOfWeek(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        //如果是周日，说明是上周的而不是本周的，要获取到上周，后退一天
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            //如果是周日，直接设置星期为7
+            dayOfWeek = 7;
+        } else {
+            //如果不是周日，星期减一
+            dayOfWeek--;
+        }
+        return dayOfWeek;
     }
 
     @org.junit.Test

@@ -15,7 +15,7 @@ public class XyzService {
      * 子类（一个匿名内部类）像填充模板一样实现Low level逻辑；
      * 父子类都作为外层Service组件的内部类存在，因此把这种对Template Method模式的特定使用风格形象的称为NestedBusinessTemplat；
      */
-    abstract class AbsUpdateFromMq {
+    abstract static class AbsUpdateFromMq {
         public final void doProcess(String jsonStr) {
             try {
                 JSONObject json = doParseAndValidate(jsonStr);
