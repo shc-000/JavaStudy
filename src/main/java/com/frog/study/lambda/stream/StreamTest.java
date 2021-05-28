@@ -165,16 +165,27 @@ public class StreamTest {
      */
     private static void calcMore() {
         List<String> jsonArr = new ArrayList<>();
-        String json = "{22:[100,100,100,200,300,400,500,1]}";
-        String json2 = "{22:[100,100,100,200,300,400,500,2]}";
-        String json3 = "{22:[100,100,100,200,300,400,500,3]}";
+        String json = "{22:[100,1001,1002,200,3003,4004,500,1]}";
+        String json2 = "{22:[100,1001,1002,200,3003,4004,500,2]}";
+        String json3 = "{22:[100,1001,1002,200,3003,4004,500,3]}";
         jsonArr.add(json);
         jsonArr.add(json2);
         jsonArr.add(json3);
 
         List<Integer> result = new ArrayList<>();
 
-        jsonArr.stream().map(str -> jsonToMap(str).get(22)).forEach(r -> forEach(0, r, (index, item) -> result.set(index, item + fetchById(result, index))));
+        jsonArr.stream().map(str -> jsonToMap(str).get(22))
+                .forEach(r ->
+                                 forEach(0, r, (index, item)
+                                         -> {
+                                             if (result.size() < r.size()) {
+                                                 result.add(index, item + fetchById(result, index));
+                                             } else {
+                                                 result.set(index, item + fetchById(result, index));
+                                             }
+                                         }
+                                 )
+                );
         System.out.println(result);
     }
 
