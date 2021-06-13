@@ -1,11 +1,13 @@
 package com.shc.test;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.frog.study.Student;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -27,25 +29,47 @@ public class Test {
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @org.junit.Test
-    public void nowDay1() {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate startDate = LocalDate.parse("2018-06-01", df);
-        LocalDate endDate = startDate.plusDays(6);
-//        String localTime = df.format(time);
-        System.out.printf(df.format(startDate));
-        System.out.printf(df.format(endDate));
+    public void nowDay1() throws JsonProcessingException {
+//        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//        LocalDate startDate = LocalDate.parse("2018-06-01", df);
+//        LocalDate endDate = startDate.plusDays(6);
+////        String localTime = df.format(time);
+//        System.out.printf(df.format(startDate));
+//        System.out.printf(df.format(endDate));
+
+        /*LocalDate today = LocalDate.now();
+        //本周一
+        LocalDateTime monday = getLocalDateByParameters(today, DayOfWeek.MONDAY, 0).atStartOfDay();
+        //第二天
+        LocalDateTime nextDay = today.plusDays(1).atStartOfDay();
+        System.out.println(monday);
+        System.out.println(nextDay);*/
+        System.out.println(12%3);
+        System.out.println(9%2);
+
 
     }
 
+
+    public static LocalDate getLocalDateByParameters(LocalDate localDate,DayOfWeek dayOfWeek,Integer index){
+        LocalDate afterChange = localDate.plusDays(7 * (index + 1));
+        int targetValue = dayOfWeek.getValue();
+        int cursorValue = afterChange.getDayOfWeek().getValue();
+        if (cursorValue > targetValue){
+            return afterChange.with(TemporalAdjusters.previous(dayOfWeek)).with(TemporalAdjusters.previous(dayOfWeek));
+        }else{
+            return afterChange.with(TemporalAdjusters.previous(dayOfWeek));
+        }
+    }
+
     @org.junit.Test
-    public void testList(){
-        List<Integer> list = new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-//        Arrays.asList(1,2,3);
-        list.remove(0);
-        System.out.println(list);
+    public void testList() {
+        String a = "a";
+        String x = "b";
+        String b = "b";
+        if (Objects.equals(a, b)) {
+            System.out.println(a);
+        }
     }
 
     @org.junit.Test
@@ -122,11 +146,6 @@ public class Test {
         if (Calendar.THURSDAY == calendar.get(Calendar.DAY_OF_WEEK)){
             System.out.println(123);
         }
-
-        System.out.println(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.of(LocalDate.now(), LocalTime.MIN)));
-        System.out.println(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now()));
-        Date dateTime = Date.from(LocalDate.parse("2021-05-27").atStartOfDay(ZoneOffset.ofHours(8)).toInstant());
-        System.out.println(dateTime.getDay()+"-"+dateTime.getMonth()+"-"+dateTime.getYear());
 
 //        Calendar cal = Calendar.getInstance();
 //        cal.setTime(new Date());

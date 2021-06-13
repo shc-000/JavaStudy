@@ -2,6 +2,7 @@ package com.frog.study.lambda2;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Arrays;
@@ -14,8 +15,9 @@ import java.util.List;
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Person {
-    private Integer age;
+    public Integer age;
     private String gender;
     private String emailAddress;
     private String name;

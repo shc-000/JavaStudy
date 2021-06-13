@@ -2,6 +2,7 @@ package com.frog.study.collection;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Maps;
 import lombok.Data;
 import org.junit.Test;
 import com.google.common.collect.ImmutableMap;
@@ -68,6 +69,10 @@ public class MapTest {
         //computeIfAbsent在放入数据时，若key对应的value为空，会将第二个参数的返回值存入并返回
         map.computeIfAbsent("a", l -> new ArrayList<>()).add(6);
         System.out.println(map);
+
+        Map<String,Integer> mm = Maps.newHashMap();
+        mm.computeIfAbsent("b", v -> 1);
+        System.out.println(mm);
     }
 
 
