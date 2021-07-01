@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.google.common.collect.Sets.newHashSet;
 
@@ -337,4 +338,15 @@ public class GuavaTest {
     }
 
     //以上只是guava使用的一小部分，guava是个大的工具类
+    @Test
+    public void test() {
+        List<String> list = new ArrayList<String>();
+        list.add("aa");
+        Set<String> aa = list.stream().filter("bb"::equals).collect(Collectors.toSet());
+        if (aa.contains("aa")) {
+            System.out.println(1);
+        } else {
+            System.out.println(2);
+        }
+    }
 }

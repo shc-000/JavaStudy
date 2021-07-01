@@ -26,6 +26,7 @@ public class StreamTest {
 //        peek();
 //        filterTest();
         calcMore();
+//        testForEach();
     }
 
     private static List<Student> buildStudentList() {
@@ -36,6 +37,12 @@ public class StreamTest {
                 new Student("昭君", 19, "女", "清华"),
                 new Student("貂蝉", 18, "女", "北大"),
                 new Student("西施", 16, "女", "南开"));
+    }
+
+    private static void testForEach(){
+        List<Student> students = buildStudentList();
+        students.forEach(student -> student.setAge(16));
+        students.forEach(stu -> System.out.println(stu.getAge()));
     }
 
     /**

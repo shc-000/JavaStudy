@@ -1,16 +1,13 @@
 package com.shc.test;
 
-import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.frog.study.Student;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import org.apache.commons.collections4.MapUtils;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
@@ -29,6 +26,14 @@ public class Test {
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @org.junit.Test
+    public void assertTest(){
+        int a = 1;
+        Assert.state(a == 2, () -> {
+            return "不是你想要的答案啊";
+        });
+        //a==2不满足则抛出异常
+    }
+    @org.junit.Test
     public void nowDay1() throws JsonProcessingException {
 //        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 //        LocalDate startDate = LocalDate.parse("2018-06-01", df);
@@ -44,10 +49,9 @@ public class Test {
         LocalDateTime nextDay = today.plusDays(1).atStartOfDay();
         System.out.println(monday);
         System.out.println(nextDay);*/
-        System.out.println(12%3);
-        System.out.println(9%2);
-
-
+//        System.out.println(12%3);
+//        System.out.println(9%2);
+        System.out.println(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
     }
 
 
