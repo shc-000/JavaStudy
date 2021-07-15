@@ -23,9 +23,9 @@ public class StreamTest {
 //        flatMap();
 //        distinct();
 //        reUseStream();
-//        peek();
+        peek();
 //        filterTest();
-        calcMore();
+//        calcMore();
 //        testForEach();
     }
 
@@ -180,7 +180,8 @@ public class StreamTest {
         jsonArr.add(json3);
 
         List<Integer> result = new ArrayList<>();
-
+        List<List<Integer>> ll = jsonArr.stream().map(str -> jsonToMap(str).get(22)).collect(Collectors.toList());
+//        ll.stream().flatMap(x->x.)
         jsonArr.stream().map(str -> jsonToMap(str).get(22))
                 .forEach(r ->
                                  forEach(0, r, (index, item)
