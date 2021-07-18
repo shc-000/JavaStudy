@@ -13,17 +13,17 @@ public class CallableFutureTest {
     private String aa;
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        Callable<Integer> calculateCallable = new Callable<Integer>() {
+        Callable<String> calculateCallable = new Callable<String>() {
             @Override
-            public Integer call() throws Exception {
+            public String call() throws Exception {
                 //这里模拟一个耗时的操作，如从数据库取大量数据。。。
                 Thread.sleep(2000);
-                int result = 1 + 2;
+                String result = 1 + 2+"aaa";
                 return result;
             }
         };
-
-        FutureTask<Integer> calculateFutureTask = new FutureTask<>(calculateCallable);
+        //FutureTask包装Callable，并且FutureTask中有个全局变量<Object>outcome,用来存储执行结果
+        FutureTask<String> calculateFutureTask = new FutureTask<>(calculateCallable);
 
         Thread t1 = new Thread(calculateFutureTask);
         t1.start();
@@ -33,7 +33,7 @@ public class CallableFutureTest {
             //模拟耗时任务，主线程做自己的事情，体现多线程的优势
             Thread.sleep(3000);
             int a = 3 + 3;
-            Integer result = calculateFutureTask.get();
+            String result = calculateFutureTask.get();
 //            get方法：获取计算结果（如果还没计算完，也是必须等待的，阻塞）
 //            cancel方法：还没计算完，可以取消计算过程
 //            isDone方法：判断是否计算完
