@@ -49,8 +49,23 @@ public class MutiCalcCollector implements Collector<OrderDto, Map<String, MutiCa
 
     @Override
     public BinaryOperator<Map<String, MutiCalcModel>> combiner() {
-        log.info("no combiner invoke ....");
-        return null;
+        log.info("combiner invoke ....");
+        System.out.println("线程信息----->"+Thread.currentThread().getName());
+        return (left, right) -> {
+            right.forEach((status, rightModel) -> {
+                if (left.containsKey(status)) {
+                    MutiCalcModel leftModel = left.get(status);
+                    leftModel.setOrderQtySum(rightModel.getOrderQtySum() + leftModel.getOrderQtySum());
+                    leftModel.setOrderSum(rightModel.getOrderSum() + leftModel.getOrderSum());
+                    leftModel.setWarningOrderQtySum(rightModel.getWarningOrderQtySum() + leftModel.getWarningOrderQtySum());
+                    leftModel.setWarningOrderSum(rightModel.getWarningOrderSum() + leftModel.getWarningOrderSum());
+//                    left.put(status, leftModel);
+                } else {
+                    left.put(status, rightModel);
+                }
+            });
+            return left;
+        };
     }
 
     @Override
@@ -74,7 +89,8 @@ public class MutiCalcCollector implements Collector<OrderDto, Map<String, MutiCa
                 // finisher 会执行
                 EnumSet.of(
                         Characteristics.UNORDERED,
-                        Characteristics.CONCURRENT
+                        Characteristics.CONCURRENT,
+                        Characteristics.IDENTITY_FINISH
                 )
         );
     }
