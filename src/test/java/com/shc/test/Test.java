@@ -1,5 +1,6 @@
 package com.shc.test;
 
+import com.alibaba.fastjson.JSONArray;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,12 +9,15 @@ import com.google.common.collect.Lists;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -25,6 +29,11 @@ import java.util.stream.Stream;
 public class Test {
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    public static void main(String[] args) {
+        String da = "2021/9/27半周\n" +
+                "9/27-9/30";
+        System.out.println(da.replace("\n"," "));
+    }
     @org.junit.Test
     public void assertTest(){
         int a = 1;
@@ -67,13 +76,59 @@ public class Test {
     }
 
     @org.junit.Test
-    public void testList() {
-        String a = "a";
-        String x = "b";
-        String b = "b";
-        if (Objects.equals(a, b)) {
-            System.out.println(a);
+    public void validNum() {
+        System.out.println(isNumeric("0"));
+    }
+    /**
+     * 匹配是否为数字
+     * @param str 可能为中文，也可能是-19162431.1254，不使用BigDecimal的话，变成-1.91624311254E7
+     */
+    private boolean isNumeric(String str) {
+        // 该正则表达式可以匹配所有的数字 包括负数
+        Pattern pattern = Pattern.compile("[0-9]+");
+        String bigStr;
+        try {
+            bigStr = new BigDecimal(str).toString();
+        } catch (Exception e) {
+            return false;//异常 说明包含非数字。
         }
+
+        Matcher isNum = pattern.matcher(bigStr); // matcher是全匹配
+        return isNum.matches();
+    }
+
+    @org.junit.Test
+    public void testList() {
+//        String a = "a";
+//        String x = "b";
+//        String b = "b";
+//        if (Objects.equals(a, b)) {
+//            System.out.println(a);
+//        }
+
+        IntStream intStream=IntStream.rangeClosed(1,16);
+        intStream.forEach(System.out::println);
+        int k=12;
+//        String s = String.format("%05d", k);
+//        System.out.println(s);
+
+//        int[] arr = new int[3];
+//        Integer[] integers1 = Arrays.stream(arr).boxed().toArray(Integer[]::new);
+        Integer[] intArr = new Integer[3];
+//        Arrays.stream(arr).boxed().
+        JSONArray jsonArray=new JSONArray(Arrays.asList(intArr));
+        System.out.println(jsonArray.toString());
+//
+//        String str1 = Arrays.stream(arr).boxed().map(i -> i.toString()) //必须将普通数组 boxed才能 在 map 里面 toString
+//                .collect(Collectors.joining(""));
+//        System.out.println(str1);
+//
+//        String str2 = Arrays.stream(arr).boxed().map(i -> i.toString()).reduce("", String::concat);
+//        System.out.println(str2);
+//
+//        String str3 = Arrays.stream(arr).boxed().map(Object::toString).reduce("", String::concat); // 方法引用Object：：toString
+//        System.out.println(str3);
+
     }
 
     @org.junit.Test

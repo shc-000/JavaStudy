@@ -77,21 +77,8 @@ public class MutiCalcCollector implements Collector<OrderDto, Map<String, MutiCa
     @Override
     public Set<Characteristics> characteristics() {
         log.info("characteristics invoke ....");
-        return Collections.unmodifiableSet(
-                /*
-                // finisher 不会执行
-                EnumSet.of(
-                        Characteristics.UNORDERED,
-                        Characteristics.CONCURRENT,
-                        Characteristics.IDENTITY_FINISH
-                )
-                */
-                // finisher 会执行
-                EnumSet.of(
-                        Characteristics.UNORDERED,
-                        Characteristics.CONCURRENT,
-                        Characteristics.IDENTITY_FINISH
-                )
-        );
+//        return Collections.emptySet();
+        //参考ReferencePipeline中的toList等收集的配置
+        return Collections.unmodifiableSet(EnumSet.of(Characteristics.CONCURRENT,Characteristics.UNORDERED));
     }
 }

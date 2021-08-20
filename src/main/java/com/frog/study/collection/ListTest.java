@@ -1,5 +1,10 @@
 package com.frog.study.collection;
 
+import com.alibaba.fastjson.JSON;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.map.HashedMap;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,5 +60,13 @@ public class ListTest {
 //                CodeBean::getCode,
 //                CodeBean::getParentCode,
 //                CodeBean::setChildren);
+//        List<Integer> list = new ArrayList<>();
+//        list.add(1);
+//        list.add(2);
+//        list.add(3);
+//        list.add(4);
+//        System.out.println(list);
+//        list.add(0,0);
+//        System.out.println(list);
     }
 }
