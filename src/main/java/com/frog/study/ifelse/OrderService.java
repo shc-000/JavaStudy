@@ -27,6 +27,7 @@ public class OrderService {
     private Map<String, OrderHandler> orderHandleMap;
 
     public void setOrderHandleMap(List<OrderHandler> orderHandlers) {
+
         // 注入各种类型的订单处理类
         orderHandleMap = orderHandlers.stream().collect(
                 Collectors.toMap(orderHandler -> AnnotationUtils.findAnnotation(orderHandler.getClass(), OrderHandlerType.class).source(),

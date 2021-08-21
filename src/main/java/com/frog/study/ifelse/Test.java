@@ -13,6 +13,7 @@ public class Test {
     public static void main(String[] args) {
         String type = AnnotationUtils.findAnnotation(MobileOrderHandler.class, OrderHandlerType.class).source();
 
+
 //        OrderService orderService = new OrderService();
 //        OrderHandler mobile = new MobileOrderHandler();
 //        OrderHandler pc = new PCOrderHandler();

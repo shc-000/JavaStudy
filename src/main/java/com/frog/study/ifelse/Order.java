@@ -10,6 +10,7 @@ import java.math.BigDecimal;
  */
 @Data
 public class Order {
+
     /**
      * 订单来源
      */
