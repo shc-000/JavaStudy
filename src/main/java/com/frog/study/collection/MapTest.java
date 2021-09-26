@@ -2,7 +2,9 @@ package com.frog.study.collection;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import lombok.Data;
 import org.junit.Test;
 import com.google.common.collect.ImmutableMap;
@@ -25,6 +27,20 @@ public class MapTest {
     @Test
     public void containsValue() {
 
+    }
+
+    @Test
+    public void mutiMap() {
+        Multimap<String,String> multimap = ArrayListMultimap.create();
+
+        multimap.put("lower", "a");
+        multimap.put("lower", "b");
+        multimap.put("lower", "c");
+
+        multimap.put("upper", "A");
+        multimap.put("upper", "B");
+
+        System.out.println(multimap.asMap());
     }
 
     //compute() 方法对 hashMap 中指定 key 的值进行重新计算。指定的key在map中的值进行操作 不管存不存在，操作完成后保存到map中
@@ -69,7 +85,7 @@ public class MapTest {
         //computeIfAbsent在放入数据时，若key对应的value为空，会将第二个参数的返回值存入并返回
         map.computeIfAbsent("a", l -> new ArrayList<>()).add(6);
         System.out.println(map);
-
+        map.computeIfAbsent("a", l -> new ArrayList<>()).add(7);
         Map<String,Integer> mm = Maps.newHashMap();
         mm.computeIfAbsent("b", v -> 1);
         System.out.println(mm);
