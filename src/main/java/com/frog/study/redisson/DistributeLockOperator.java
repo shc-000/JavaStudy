@@ -16,14 +16,16 @@ import java.util.concurrent.TimeUnit;
 public class DistributeLockOperator {
 
     /**
-     * 加锁
+     * 分布式锁key
+     */
+    public static final String DISTRIBUTE_LOCK_KEY = "distribute_lock";
+
+    /**
+     * 加锁（+重试机制）
      *
      * @return boolean
      */
-    public boolean tryGetLock(long sleepTime, int attemptNumber, long waitTime, String methodName) {
-        RedissonClient redissonClient = RedssonConfig.redisson();
-        // 设置锁定资源名称
-        RLock disLock = redissonClient.getLock("distribute_lock");
+    public boolean tryGetLock(RLock disLock, long sleepTime, int attemptNumber, long waitTime, String methodName) {
         Retryer<Boolean> retryer = RetryerBuilder.<Boolean>newBuilder()
                 //网络异常重试
                 .retryIfExceptionOfType(RemoteAccessException.class)
@@ -56,28 +58,61 @@ public class DistributeLockOperator {
     /**
      * 释放锁
      */
-    public void releaseLock(String methodName) {
+    public void releaseLock(RLock disLock, String methodName) {
         try {
-            RedissonClient redissonClient = RedssonConfig.redisson();
-
-            RLock disLock = redissonClient.getLock("distribute_lock");
-            disLock.unlock();
+            // 是否还是锁定状态
+            if (disLock.isLocked()) {
+                //当前执行线程的锁
+                if (disLock.isHeldByCurrentThread()) {
+                    disLock.unlock();
+                }
+            }
             log.info("nebula-intg-backend: {}:release lock...", methodName);
         } catch (Exception e) {
             log.warn("nebula-intg-backend: {}:release lock fail", methodName, e);
         }
     }
 
+    public void test() {
+        RedissonClient redissonClient = RedssonConfig.redisson();
+        // 设置锁定资源名称
+        RLock disLock = redissonClient.getLock(DISTRIBUTE_LOCK_KEY);
+        try {
+            boolean isLock = tryGetLock(disLock, 10L, 3, 1000, "test()");
+            if (isLock) {
+                //do something...
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            releaseLock(disLock, "test()");
+        }
+    }
+
     public static void main(String[] args) throws InterruptedException {
         RedissonClient redissonClient = RedssonConfig.redisson();
         // 设置锁定资源名称
-        RLock disLock = redissonClient.getLock("distribute_lock");
+        RLock disLock = redissonClient.getLock(DISTRIBUTE_LOCK_KEY);
         //尝试获取分布式锁，等待10s
         try {
-            boolean flag = disLock.tryLock(10L, TimeUnit.MINUTES);
+            long id = Thread.currentThread().getId();
+            System.out.println("线程ID" + id);
+            boolean flag = disLock.tryLock(10L,10L, TimeUnit.MINUTES);
             System.out.println(flag);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            //需要使用相同的disLock对象才能加锁后释放锁
+            if (disLock.isLocked()) {
+                //当前执行线程的锁
+                if (disLock.isHeldByCurrentThread()) {
+                    disLock.unlock();
+                } else {
+                    System.out.println("not right");
+                }
+            }
         }
     }
+
+
 }
