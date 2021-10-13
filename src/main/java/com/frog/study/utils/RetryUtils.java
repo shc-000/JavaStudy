@@ -14,7 +14,7 @@ import java.util.concurrent.locks.LockSupport;
 @Slf4j
 public class RetryUtils {
 
-    private static RetryEngine DEFAULT_ENGINE = new RetryEngine();
+    private static final RetryEngine DEFAULT_ENGINE = new RetryEngine();
 
     /**
      * 默认的重试执行，3次，间隔1000ms
@@ -186,15 +186,28 @@ public class RetryUtils {
     //测试重试工具
     public static void main(String[] args) {
         //使用重试工具类
-        String ss = RetryUtils.run(100, 10, new RetryUtils.RetryTask<String>() {
-            @Override
-            public String execute() {
-                String downloadUrl = "http//:www.bai" + null;
-                if (downloadUrl.endsWith("file/0")) {
-                    throw new RuntimeException("获取失败");
-                }
-                return downloadUrl;
+        String ss = RetryUtils.run(10, 10, () -> {
+//                System.out.println("获取。。");
+//                if (1！=2){
+//                    throw new RuntimeException("获取失败");
+//                }
+//                return true;
+            boolean flag = getLockKey();
+            if (flag) {
+                System.out.println("success");
+            } else {
+                System.out.println("can not get lock");
             }
+//            System.out.println("ceshi ....");
+//            if (System.currentTimeMillis()%10 != 0) {
+//                throw new RuntimeException("获取失败");
+//            }
+            return "downloadUrl";
         });
+        System.out.println("-----------"+ss);
+    }
+
+    private static boolean getLockKey() {
+        return false;
     }
 }
