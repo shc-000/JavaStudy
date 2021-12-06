@@ -1,5 +1,8 @@
 package com.frog.study.collection;
 
+import jodd.util.StringPool;
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * @author haichao.shao (shaohaichao@shanshu.ai)
  * @since 2021/4/1
@@ -25,6 +28,8 @@ public class StringCombinations {
         combobj.combine();
         System.out.println("--");
         System.out.println("Total combinations :: " + counter);
+
+        System.out.println(StringUtils.joinWith("-","a","b"));
     }
 
 

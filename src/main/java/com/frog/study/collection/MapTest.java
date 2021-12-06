@@ -2,13 +2,17 @@ package com.frog.study.collection;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Function;
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import lombok.Data;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Test;
 import com.google.common.collect.ImmutableMap;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -21,12 +25,25 @@ public class MapTest {
 
     @Test
     public void containsKey() {
+        Map<String,List<String>> map = Maps.newHashMap();
+        List<String> aList = map.get("a");
+        List<String> bList = aList.stream().collect(Collectors.toList());
+    }
+
+    @Test
+    public void testGuavaMap(){
 
     }
 
     @Test
     public void containsValue() {
-
+        String key1 = "a";
+        String key2 = "k";
+        Map<String, Map<String, Double>> itemSiteBucketValueMap = Maps.newHashMap();
+        itemSiteBucketValueMap.put(key1, new HashMap<String, Double>() {{
+            put(key2, 2d);
+        }});
+        System.out.println(itemSiteBucketValueMap.get("a"));
     }
 
     @Test
@@ -80,8 +97,13 @@ public class MapTest {
     //当key存在返回当前value值，不存在执行函数并保存到map中
     @Test
     public void computeIfAbsent() {
-        Map<String, List<Integer>> map = new HashMap<>();
+        Map<String, String> mmp = new HashMap<>();
+        mmp.putIfAbsent("a", "v");
+        mmp.putIfAbsent("a", "k");
+        System.out.println(mmp);
         //putIfAbsent在放入数据时，如果存在重复的key，那么putIfAbsent不会放入值。
+        Map<String, List<Integer>> map = new HashMap<>();
+        System.out.println(map);
         //computeIfAbsent在放入数据时，若key对应的value为空，会将第二个参数的返回值存入并返回
         map.computeIfAbsent("a", l -> new ArrayList<>()).add(6);
         System.out.println(map);
@@ -89,6 +111,7 @@ public class MapTest {
         Map<String,Integer> mm = Maps.newHashMap();
         mm.computeIfAbsent("b", v -> 1);
         System.out.println(mm);
+
     }
 
 

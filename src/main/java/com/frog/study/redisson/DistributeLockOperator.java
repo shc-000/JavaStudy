@@ -95,10 +95,29 @@ public class DistributeLockOperator {
         RLock disLock = redissonClient.getLock(DISTRIBUTE_LOCK_KEY);
         //尝试获取分布式锁，等待10s
         try {
-            long id = Thread.currentThread().getId();
-            System.out.println("线程ID" + id);
-            boolean flag = disLock.tryLock(10L,10L, TimeUnit.MINUTES);
-            System.out.println(flag);
+            boolean flag = disLock.tryLock(10L, TimeUnit.SECONDS);
+
+//            int i = 0;
+//            while (i < 5) {
+//                long id = Thread.currentThread().getId();
+//                log.info("线程ID---{}", id);
+//                boolean flag = disLock.tryLock(10L, TimeUnit.SECONDS);
+//                log.info("get lock {},{}", flag, i);
+//                i++;
+//            }
+            Thread.sleep(30000L);
+            System.out.println("game over......");
+            if (disLock.isLocked()) {
+                //当前执行线程的锁
+                if (disLock.isHeldByCurrentThread()) {
+                    log.info("release lock.....");
+                    disLock.unlock();
+                } else {
+                    log.info("can not release lock");
+                }
+            } else {
+                log.info("not lock.....");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -108,8 +127,10 @@ public class DistributeLockOperator {
                 if (disLock.isHeldByCurrentThread()) {
                     disLock.unlock();
                 } else {
-                    System.out.println("not right");
+                    System.out.println("can not release lock");
                 }
+            } else {
+                log.info("not lock.....");
             }
         }
     }

@@ -1,14 +1,9 @@
 package com.frog.study.collection;
 
-import com.alibaba.fastjson.JSON;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.collections4.map.HashedMap;
+import com.google.common.collect.Lists;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -55,8 +50,33 @@ public class ListTest {
         return result;
     }
 
-    public static void main(String[] args) {
+    public static void indexOf() {
+        List<String> list = Lists.newArrayList("a", "b");
+        int coo = list.indexOf("c");
+        System.out.println("坐标" + coo);
+    }
 
+   static Date getLastDayOfYear(final Date date) {
+
+        final Calendar cal = Calendar.getInstance();
+
+        cal.setTime(date);
+
+        final int last = cal.getActualMaximum(Calendar.DAY_OF_YEAR);
+
+        cal.set(Calendar.DAY_OF_YEAR, last);
+
+        return cal.getTime();
+    }
+
+
+    public static void main(String[] args) {
+        indexOf();
+        Double[] doa = new Double[12];
+        System.out.println(Optional.ofNullable(doa[1]).orElse(0D).toString());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        System.out.println(simpleDateFormat.format(getLastDayOfYear(new Date())));
 //        toTree(answers,
 //                CodeBean::getCode,
 //                CodeBean::getParentCode,
