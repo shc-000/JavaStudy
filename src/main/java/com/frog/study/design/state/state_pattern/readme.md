@@ -1,0 +1,10 @@
+State模式和Proxy模式类似，但是在State模式中EntranceMachineState持有EntranceMachine实例的引用。
+
+我们发现EntranceMachine的execute()方法的逻辑变的简单，但是代码复杂度升高了。
+因为每个state实例都提供了两个动作实现insertCoin()和pass()。
+这个地方本人认为并不够表意，因为作出的动作被添加到两个状态上，虽然能够实现业务业务，但是并不利于理解清楚业务意思。
+
+
+State模式，虽然能够将逻辑进行拆分，但是那些状态的顺序，以及有几种状态，都不是很直观的观察到。
+
+不过在实际业务中，State模式也是一种很好的实现方式，毕竟他避免了switch的堆积问题。

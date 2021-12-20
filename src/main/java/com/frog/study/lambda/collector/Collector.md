@@ -42,21 +42,32 @@ supplier方法需返回一个Supplier，也就是一个无参数函数。
 如Collectors.toList()中supplier实现为:
 return ArrayList:new;
 
-2. 将元素添加到结果容器（累计操作）：accumulator方法
+2. 将元素添加到结果容器（累计操作）：accumulator方法 
 accumulator方法会返回执行规约操作的函数，每次执行函数都会更新累加器。
 BiConsumer 无返回值，原位更新累加器。两个参数分别为保存规约结果的累加器和遍历元素。
 如Collectors.toList()中accumulator方法实现为：
 return List:add;
-   
+```
+是要操作的集合的每个元素以怎样的形式添加到supplier提供的容器A当中，即做累加操作，比如：List.add(item)；
+```
+
 3. 对结果容器应用最终转换（终止操作）：finisher方法
 这是在遍历完流之后，在累积过程的最后要调用的一个函数，以便将累加器对象转换为整个集合操作的最终结果。
 通常，累加器对象便是最终结果。如Collectors.toList()方法中finisher实现为：
 return List:addAll;
+```
+是终止操作，如果收集器的characteristics被设置成IDENTITY_FINISH，那么会将中间集合A牵制转换为结果R类型，如果A和R没有父子之类的继承关系，
+会报类型转换失败的错误，如果收集器的characteristics没有被设置成IDENTITY_FINISH，那么finisher()方法会被调用，返回结果类型R。
+```
 
 4. 合并两个结果容器（并发的情况将每个线程的中间容器A合并）：combiner方法
 返回一个供规约操作使用的函数，定义了对流的各个子部分进行并行处理时，各个子部分要如何合并。
 即将多个累加器合并为一个，如Collectors.toList()中combiner实现为:
 return List:addALL
+```
+用于在多线程并发的情况下，每个线程都有一个supplier和，如果有N个线程那么就有N个supplier提供的容器A，执行的是类似List.addAll(listB)这样的操作,只有在characteristics没有被设置成CONCURRENT并且是并发的情况下 才会被调用。
+ps：characteristics被设置成CONCURRENT时，整个收集器只有一个容器，而不是每个线程都有一个容器，此时combiner()方法不会被调用，这种情况会出现java.util.ConcurrentModificationException异常,此时需要使用线程安全的容器作为supplier返回的对象。
+```
 
 5. 定义收集器的行为（收集器特性）：characteristics方法
 返回一份不可变的Characteristic集合，它定义了收集器的行为——关于流是否可以进行并行规约、可以使用那些优化的提示。总分包含三个部分：
@@ -84,3 +95,6 @@ enum Characteristics {
     IDENTITY_FINISH
 }
 ```
+
+### 可以看到收集器的特性被设置成CONCURRENT，并且是parallelStream，执行过程中没有调用combiner()方法。
+### 因为只有一个公用的容器没必要再去掉combiner()合并中间结果。PS：在单线程模式下，并且特性设置成CONCURRENT，combiner()会被调用。

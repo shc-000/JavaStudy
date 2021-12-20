@@ -1,0 +1,5 @@
+通过上面的代码，可以发现Action、EntranceMachineState两个枚举的复杂度都提升了。不单单是定义了常量那么简单。还提供了相应的逻辑处理。
+
+在EntranceMachineState.java的提交记录中，对进行了一次重构，将具体业务逻辑执行移动到EntranceMachine中，EntranceMachineState内每种状态的方法中只负责调度。这样能够通过EntranceMachineState相对直观的看清楚做了什么，状态变成了什么。
+
+缺陷就是，EntranceMachine 对外提供了public的setState方法，这也就意味着调用者在将来维护是，很有可能滥用setState方法。
