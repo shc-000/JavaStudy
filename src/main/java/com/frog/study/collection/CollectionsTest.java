@@ -1,5 +1,6 @@
-package com.frog.study;
+package com.frog.study.collection;
 
+import com.frog.study.base.Student;
 import org.junit.Test;
 
 import java.util.*;

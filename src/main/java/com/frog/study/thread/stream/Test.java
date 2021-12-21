@@ -1,6 +1,6 @@
 package com.frog.study.thread.stream;
 
-import com.frog.study.Student;
+import com.frog.study.base.Student;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
 import java.util.Arrays;

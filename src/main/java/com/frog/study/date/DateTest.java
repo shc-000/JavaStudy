@@ -1,6 +1,6 @@
 package com.frog.study.date;
 
-import com.frog.study.Student;
+import com.frog.study.base.Student;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

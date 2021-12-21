@@ -1,6 +1,6 @@
 package com.frog.study.lambda.stream;
 
-import com.frog.study.Student;
+import com.frog.study.base.Student;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import com.alibaba.fastjson.JSON;

@@ -1,6 +1,6 @@
 package com.frog.study.db;
 
-import com.frog.study.Student;
+import com.frog.study.base.Student;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 

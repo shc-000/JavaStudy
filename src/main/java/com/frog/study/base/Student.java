@@ -1,4 +1,4 @@
-package com.frog.study;
+package com.frog.study.base;
 
 import lombok.*;
 

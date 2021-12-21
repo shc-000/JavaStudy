@@ -1,6 +1,6 @@
 package com.frog.study.lambda.collector;
 
-import com.frog.study.Student;
+import com.frog.study.base.Student;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
