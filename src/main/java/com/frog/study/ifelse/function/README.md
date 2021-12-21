@@ -1,0 +1,1 @@
+妙用“Function”消灭if...else
