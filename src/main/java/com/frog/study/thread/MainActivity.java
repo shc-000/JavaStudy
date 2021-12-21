@@ -1,10 +1,10 @@
 package com.frog.study.thread;
 
-import com.frog.study.threadpool.PoolThread;
-import com.frog.study.threadpool.callback.AsyncCallback;
-import com.frog.study.threadpool.callback.LogCallback;
-import com.frog.study.threadpool.callback.ThreadCallback;
-import com.frog.study.threadpool.deliver.JavaDeliver;
+import com.frog.study.thread.threadpool.PoolThread;
+import com.frog.study.thread.threadpool.callback.AsyncCallback;
+import com.frog.study.thread.threadpool.callback.LogCallback;
+import com.frog.study.thread.threadpool.callback.ThreadCallback;
+import com.frog.study.thread.threadpool.deliver.JavaDeliver;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.Callable;
